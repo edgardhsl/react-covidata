@@ -1,0 +1,34 @@
+{
+    "expo": {
+        "name": "coviddados",
+        "slug": "snack-9919d39d-77b6-4824-8f9b-7852c6980f08",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.br.codsigner.apps.covidados"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/adaptive-icon.png",
+                "backgroundColor": "#FFFFFF"
+            },
+            "package": "com.br.codsigner.apps.CoviDados"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        }
+    }
+}
