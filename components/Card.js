@@ -1,11 +1,10 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions, Image, TouchableWithoutFeedback, Linking } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 import { theme as appTheme } from '../constants';
-import { Linking } from 'expo';
 
 const { height } = Dimensions.get('screen');
 
@@ -31,7 +30,7 @@ class Card extends React.Component {
       <Block row={horizontal} card flex style={cardContainer}>
         <TouchableWithoutFeedback>
           <Block flex style={imgContainer}>
-            <Image source={{uri: item.urlToImage}} style={imageStyles} />
+            <Image source={{uri: item.thumbnail}} style={imageStyles} />
           </Block>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback>
@@ -39,7 +38,7 @@ class Card extends React.Component {
             <Text size={16} style={styles.cardTitle}>{item.title}.</Text>
             <Text numberOfLines={5} size={12} style={styles.cardTitleDescription}>{item.description.substring(0, 200) + "..."}</Text>
             <Text size={13} muted={!ctaColor} color={ctaColor || appTheme.COLORS.ACTIVE} bold onPress={(e) => this.openNews(e, item.url)}>
-                Ler mais em {item.source.name}
+                Ler mais em {item.publisher}
             </Text>
           </Block>
         </TouchableWithoutFeedback>

@@ -9,6 +9,7 @@ const { width } = Dimensions.get('screen');
 export default class States extends React.Component {
     constructor(props) {
         super(props);
+        console.log(props)
     }
 
     openCovidData(state, sg) {
@@ -24,7 +25,7 @@ export default class States extends React.Component {
                         <Block style={{ flex: 1, flexDirection: 'column', paddingHorizontal: theme.SIZES.BASE }}>
                             {Object.keys(states).map((state, index) => {
                                 return (
-                                    <TouchableOpacity key={index} onPress={() => this.openCovidData(states[state], state)}>
+                                    <TouchableOpacity style={{marginTop: 20}} key={index} onPress={() => this.openCovidData(states[state], state)}>
                                         <Card 
                                             flex                                             
                                             key={index}
@@ -45,5 +46,7 @@ export default class States extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    
+    card: {
+        backgroundColor: '#fff'
+    }
 });

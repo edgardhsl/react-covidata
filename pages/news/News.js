@@ -1,72 +1,125 @@
-import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, Platform, TouchableOpacity } from 'react-native';
-import { Block, NavBar, Icon } from 'galio-framework';
-import Card from '../../components/Card';
-import theme from '../../assets/theme';
-import newsApi from '../../assets/newsapi.json';
+import React from "react";
+import { View, StyleSheet, FlatList, Dimensions } from "react-native";
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from "react-native-indicators";
+import { Block } from "galio-framework";
+import Card from "../../components/Card";
+import { NewsServices } from "../../services/news.services";
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get("screen");
 
-const articles = newsApi.articles
+//const articles = newsApi.articles
 
 export default class News extends React.Component {
-    constructor(props) {
-        super(props);
+
+  screenHeight = Dimensions.get("window").height;
+  flatListRef;
+  lastScrollOffset = 0;
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      services: new NewsServices(),
+      currentPage: 1,
+      news: [],
+      isLoading: false,
+    };
+  }
+
+  componentDidMount() {
+    this.getNews();
+  }
+
+  isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 0;
+    this.lastScrollOffset = contentSize
+    return (
+      layoutMeasurement.height + contentOffset.y >=
+      contentSize.height - paddingToBottom
+    );
+  };
+
+  getNews(action) {
+    if (this.state.isLoading) {
+      return;
     }
 
-    render() {
-        return (            
-            <Block flex style={styles.group}>
-                <Block flex>
-                    <ScrollView>
-                        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-                            {articles.map((article, index) => {
-                                return (
-                                    <Card item={article} key={index} horizontal full />
-                                )
-                            })}
-                        </Block>
-                    </ScrollView>
-                </Block>
-            </Block>
-        );
-    }
+    if (this.state.news.length > 0) this.state.currentPage += 1;
+
+    this.setState({ isLoading: true });
+
+    this.state.services
+      .getAll(this.state.currentPage, 3)
+      .then((news) => {
+        this.setState({
+          news: [...this.state.news, ...news.data.results],
+        });
+
+        console.log(this.state.news.length);
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
+        });
+
+        if(this.state.currentPage > 1) {
+            setTimeout(() => {
+                this.flatListRef.scrollToOffset({ animated: true, offset: this.lastScrollOffset + 50 });
+            }, 1000)
+        }
+      });
+  }
+
+  renderLoading() {
+    return this.state.isLoading ? (
+      <WaveIndicator style={styles.loading} size={60} color="#5E72E4" />
+    ) : null;
+  }
+
+  render() {
+    return (
+      <Block flex style={styles.group}>
+        <View style={{ paddingHorizontal: 10, flex: 1 }}>
+          <FlatList
+            ref={ref => this.flatListRef = ref}
+            onScroll={({ nativeEvent }) => {
+              if (this.isCloseToBottom(nativeEvent)) {
+                this.getNews();
+              }
+            }}
+            scrollEventThrottle={400}
+            data={this.state.news}
+            ItemSeparatorComponent={() => <View style={{ width: 5 }} />}
+            renderItem={({ item }, index) => (
+              <Card item={item} key={index} horizontal full />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          {this.renderLoading()}
+        </View>
+      </Block>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    cards: {
-      width,
-      backgroundColor: theme.COLORS.WHITE,
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-    },
-    card: {
-      backgroundColor: theme.COLORS.WHITE,
-      width: width - theme.SIZES.BASE * 2,
-      marginVertical: theme.SIZES.BASE * 0.875,
-      elevation: theme.SIZES.BASE / 2,
-    },
-    full: {
-      position: 'absolute',
-      bottom: 0,
-      right: 0,
-      left: 0,
-    },
-    noRadius: {
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-    },
-    rounded: {
-      borderRadius: theme.SIZES.BASE * 0.1875,
-    },
-    gradient: {
-      bottom: 0,
-      left: 0,
-      right: 0,
-      height: 90,
-      position: 'absolute',
-      overflow: 'hidden',
-      borderBottomRightRadius: theme.SIZES.BASE * 0.5,
-      borderBottomLeftRadius: theme.SIZES.BASE * 0.5,
-    },
-  });
+  loading: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+});

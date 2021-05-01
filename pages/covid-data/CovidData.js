@@ -16,10 +16,13 @@ const numberFormat = (value) => {
 
 export default class CovidData extends React.Component {
 
-    stateData = CovidDataset.find(item => item._id === this.props.route.params.SG);
+    stateData = CovidDataset.find(item => {
+        return item._id === this.props.route.params.SG;
+    });
 
     constructor(props) {
         super(props);
+        console.log(this.props.route.params.SG)
     }
 
     render() {
@@ -36,16 +39,16 @@ export default class CovidData extends React.Component {
                                 caption="Dados atualizados nas últimas 24hs."
                             />
                             <Text>População <Text size={10} style={{color: 'rgba(0,0,0,.5)', paddingLeft: 10}}>(Estimado pelo TCU 2019)</Text></Text>
-                            <Input type="decimal-pad" editable={false} value={numberFormat(this.stateData.populacaoTCU2019)} />
+                            <Input type="decimal-pad" color={theme.COLORS.GREY} editable={false} value={numberFormat(this.stateData.populacaoTCU2019)} />
                             
                             <Text>Registros casos</Text>
-                            <Input type="decimal-pad" editable={false} value={numberFormat(this.stateData.incidencia)} />
+                            <Input type="decimal-pad" color={theme.COLORS.GREY} editable={false} value={numberFormat(this.stateData.incidencia)} />
                             <Text>Total de casos</Text>
-                            <Input type="decimal-pad" editable={false} value={numberFormat(this.stateData.casosAcumulado)} />
+                            <Input type="decimal-pad" color={theme.COLORS.GREY} editable={false} value={numberFormat(this.stateData.casosAcumulado)} />
                             <Text>Registros de óbitos</Text>
-                            <Input type="decimal-pad" editable={false} value={numberFormat(this.stateData.incidenciaObito)} />
+                            <Input type="decimal-pad" color={theme.COLORS.GREY} editable={false} value={numberFormat(this.stateData.incidenciaObito)} />
                             <Text>Total de óbitos</Text>
-                            <Input type="decimal-pad" editable={false} value={numberFormat(this.stateData.obitosAcumulado)} />
+                            <Input type="decimal-pad" color={theme.COLORS.GREY} editable={false} value={numberFormat(this.stateData.obitosAcumulado)} />
                         </Block>
                     </ScrollView>
                 </Block>
