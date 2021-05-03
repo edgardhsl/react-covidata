@@ -1,4 +1,4 @@
-# CoviData API
+# React Covidata
 Aplicação feita para o trabalho de Dispositivos Móveis do IFBA - Campus Vitória da Conquista
 
 ## Requisitos
