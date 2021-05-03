@@ -38,7 +38,7 @@ class Card extends React.Component {
             <Text size={16} style={styles.cardTitle}>{item.title}.</Text>
             <Text numberOfLines={5} size={12} style={styles.cardTitleDescription}>{item.description.substring(0, 200) + "..."}</Text>
             <Text size={13} muted={!ctaColor} color={ctaColor || appTheme.COLORS.ACTIVE} bold onPress={(e) => this.openNews(e, item.url)}>
-                Ler mais em {item.publisher}
+                Ler notícia em {item.publisher}
             </Text>
           </Block>
         </TouchableWithoutFeedback>

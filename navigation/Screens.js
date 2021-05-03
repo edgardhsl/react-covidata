@@ -20,7 +20,6 @@ const { width } = Dimensions.get("screen");
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
 
 function NewsStack(props) {
   return (
@@ -68,7 +67,7 @@ function CovidDataStack(props) {
     return (
       <Stack.Navigator mode="card" headerMode="screen">
         <Stack.Screen
-          name="States"
+          name="CovidData"
           component={CovidData}
           initialParams={props.route.params}
           options={{
@@ -98,6 +97,7 @@ function AppStack(props) {
   return (
     <Drawer.Navigator
       style={{ flex: 1 }}
+      detachInactiveScreens={true}
       drawerContent={props => <CustomDrawerContent {...props} />}
       drawerStyle={{
         backgroundColor: "white",
@@ -125,9 +125,9 @@ function AppStack(props) {
       }}
       initialRouteName="News"
     >
-      <Drawer.Screen name="News" component={NewsStack} />
-      <Drawer.Screen name="States" component={StateStack} />
-      <Drawer.Screen name="CovidData" component={CovidDataStack} />
+      <Drawer.Screen options={{unmountOnBlur: true}} name="News" component={NewsStack} />
+      <Drawer.Screen options={{unmountOnBlur: true}} name="States" component={StateStack} />
+      <Drawer.Screen options={{unmountOnBlur: true}} name="CovidData" component={CovidDataStack} />
     </Drawer.Navigator>
   );
 }
