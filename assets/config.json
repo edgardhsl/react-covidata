@@ -1,0 +1,17 @@
+{
+    "host": "192.168.1.122",
+    "services": {
+        "news": {
+            "port": "5001",
+            "api": "/api/news"
+        },
+        "states": {
+            "port": "5002",
+            "api": "/api/states"
+        },
+        "covidata": {
+            "port": "5003",
+            "api": "/api/covidata"
+        }
+    }
+}

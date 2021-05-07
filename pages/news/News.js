@@ -17,7 +17,7 @@ export default class News extends React.Component {
         super(props);
 
         this.state = {
-            currentPage: 1,
+            pageSize: 10,
             news: [],
             isLoading: false,
         };
@@ -32,26 +32,23 @@ export default class News extends React.Component {
             return;
         }
 
-        if (this.state.news.length > 0) 
-            this.state.currentPage += 1;
-
         this.setState({ isLoading: true });
 
-        this.newsService.getAll(this.state.currentPage, 10)
+        console.log(this.state.news.length, this.state.pageSize)
+
+        const { pageSize } = this.state;
+        const nextPage = Math.ceil((this.state.news.length / pageSize) + 1);
+
+        this.newsService.getAll(nextPage, pageSize)
         .then((news) => this.setState({ news: [...this.state.news, ...news.data.results] }))
-        .catch(e => this.errorServer = true)
+        .catch(_ => this.errorServer = true)
         .finally(() => {
             this.setState({ isLoading: false });
             if(!this.errorServer) {
+                this.setState({currentPage: 1});
                 this._animateScrollSuccess();
             }
         });
-    }
-
-    renderLoading() {
-        return this.state.isLoading ? (
-            <WaveIndicator style={styles.loading} size={60} color="#5E72E4" />
-        ) : null;
     }
 
     _isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }) {
@@ -80,15 +77,25 @@ export default class News extends React.Component {
         }
     }
 
+    renderLoading() {
+        return this.state.isLoading ? (
+            <WaveIndicator style={styles.loading} size={60} color="#5E72E4" />
+        ) : null;
+    }
+
     render() {
         if(this.errorServer) {
             return (
-                <View>                    
+                <Block flex style={styles.group}>
                     <Text 
                         style={{margin: 10, padding: 20, textAlign: 'center', backgroundColor: '#eee', borderRadius: 5}}>
                             Serviço temporariamente indisponível
                     </Text>    
-                </View>
+                    <Block style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <Button onPress={() => {this.getNews()}} disabled={this.state.isLoading}>Recarregar</Button>
+                    </Block>
+                    {this.renderLoading()}
+                </Block>
             );
         }
 

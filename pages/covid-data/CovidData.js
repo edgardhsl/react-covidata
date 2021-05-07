@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { Block, Input, Card } from 'galio-framework';
+import { Block, Input, Card, Button } from 'galio-framework';
 import theme from '../../assets/theme';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR'
@@ -58,10 +58,16 @@ export default class CovidData extends React.Component {
     render() {
         if(this.errorServer) {
             return (
-                <Text 
-                    style={{margin: 10, padding: 20, textAlign: 'center', backgroundColor: '#eee', borderRadius: 5}}>
-                        Serviço temporariamente indisponível
-                </Text>
+                <Block flex style={styles.group}>
+                    <Text 
+                        style={{margin: 10, padding: 20, textAlign: 'center', backgroundColor: '#eee', borderRadius: 5}}>
+                            Serviço temporariamente indisponível
+                    </Text>    
+                    <Block style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <Button onPress={() => {this.getCovidDataByState()}} disabled={this.state.isLoading}>Recarregar</Button>
+                    </Block>
+                    {this.renderLoading()}
+                </Block>
             );
         }
 
